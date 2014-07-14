@@ -1,5 +1,5 @@
-#/ Controller version = 2.10
-#/ Date = 4/8/2013 10:27 AM
+#/ Controller version = 2.21
+#/ Date = 3/11/2014 4:43 AM
 #/ User remarks = 
 #0
 !!!!!!!!!!!!!!! EtherCAT Setup Buffer !!!!!!!!!!!!!!!
@@ -14,9 +14,11 @@
 
 !!! Variable Declaration
 INT AXIS
-GLOBAL INT homeCounter_tow, homeCounter_AKD
+GLOBAL INT homeCounter_tow, homeCounter_AKD, homeCounter_y, homeCounter_z
 homeCounter_tow = 0
 homeCounter_AKD = 0
+homeCounter_y = 0
+homeCounter_z = 0
 
 AUTOEXEC:
 
@@ -96,9 +98,11 @@ END
 PI = ACOS(-1)
 T = CTIME / 1000
 
-
 !!! Unmap any current EtherCAT mappings
 ECUNMAP
+
+!!! Set AKD digital output mask
+COEWRITE/4 (1, 0x60FE, 2, 196608)
 
 !!! Map each 3rd party axis variables
 !!! - User must go to each subroutine corresponding to a used axis and properly define ECIN / ECOUT offsets
@@ -210,6 +214,9 @@ BLOCK
 	PFLAGS(30).#NOAUTO = 0
 	PFLAGS(31).#NOAUTO = 0
 END
+
+!invert direction of Z axis
+MFLAGS(z).#INVDOUT = 1
 
 STOP
 
@@ -1170,6 +1177,8 @@ REAL TIMER
 INT HOME_COUNTER
 INT FAULT_CLEAR_COUNTER
 
+GLOBAL INT ENABLE_AXIS(32)
+
 !!! Variable Initialization
 AXIS = 5
 SLAVE_ID = 0
@@ -1185,10 +1194,10 @@ FAULT_CLEAR_COUNTER = 0
 
 !!! Motion Parameter Initialization
 EFAC(AXIS) = 0.08/POW(2,20) ! meters, 8 cm /rev & 2^20 count/rev encoder
-VEL(AXIS) = 0.1
-ACC(AXIS) = 1
-DEC(AXIS) = 1
-JERK(AXIS) = 10
+VEL(AXIS) = 0.2
+ACC(AXIS) = 0.5
+DEC(AXIS) = 0.5
+JERK(AXIS) = 5
 KDEC(AXIS) = 2
 XVEL(AXIS) = 3
 XACC(AXIS) = 2
@@ -1268,7 +1277,7 @@ WHILE 1; BLOCK
 		IF (MST(AXIS).#ENABLED = 0)
 			SET APOS(AXIS) = R_POS(AXIS) * EFAC(AXIS) + E_OFFSET(AXIS) ! Update axis position according to reference position
 		END
-		!DISP "CiA move to Ready to switch on"
+		DISP "CiA move to Ready to switch on"
 		
 	ELSEIF (SW(AXIS).1 = 0) ! Switched on, off
 		! User commanded axis to be enabled, step 2
@@ -1284,7 +1293,7 @@ WHILE 1; BLOCK
 		IF (MST(AXIS).#ENABLED = 0)
 			SET APOS(AXIS) = R_POS(AXIS) * EFAC(AXIS) + E_OFFSET(AXIS) ! Update axis position according to reference position
 		END
-		!DISP "CiA move to Switched on"
+		DISP "CiA move to Switched on"
 		
 	ELSEIF (SW(AXIS).2 = 0) ! Operation enabled, off
 		! User commanded axis to be enabled, step 3
@@ -1300,7 +1309,7 @@ WHILE 1; BLOCK
 		IF (MST(AXIS).#ENABLED = 0)
 			SET APOS(AXIS) = R_POS(AXIS) * EFAC(AXIS) + E_OFFSET(AXIS) ! Update axis position according to reference position
 		END
-		!DISP "CiA move to Operation enabled"
+		DISP "CiA move to Operation enabled"
 	
 	ELSEIF (SW(AXIS).12 = 0) ! Operation mode specific, off
 		! User commanded axis to be enabled, step 4
@@ -1316,7 +1325,7 @@ WHILE 1; BLOCK
 		IF (MST(AXIS).#ENABLED = 0)	
 			SET APOS(AXIS) = R_POS(AXIS) * EFAC(AXIS) + E_OFFSET(AXIS) ! Update axis position according to reference position
 		END
-		!DISP "CiA operation mode specific step"
+		DISP "CiA operation mode specific step"
 		
 	ELSE
 		IF ((MoOD(AXIS) = 8) & (M_ST(AXIS).#ENABLED = 1)) ! CSP mode and enabled
@@ -1405,35 +1414,37 @@ ON PST(SYSINFO(3)).#RUN = 0; START SYSINFO(3), 1; RET
 
 GLOBAL INT homeCounter_tow
 
-MoO(1) = 6
-TILL MoOD(1) = 6
-ENABLE (1)
-TILL MoOD(1) = 8
+MoO(tow) = 6
+TILL MoOD(tow) = 6
+ENABLE (tow)
+TILL MoOD(tow) = 8
+
+! Set soft limits
+FMASK5.#SRL = 1
+SRLIMIT5 = 24.9
+FMASK5.#SLL = 1
+SLLIMIT5 = 0.0
 
 homeCounter_tow = homeCounter_tow + 1
 
 STOP
 
 #3
-! This program does a back and forth move
+! This program does a back and forth move on the tow axis
 
-global int DoWork
-local int iteration
+GLOBAL INT move
+LOCAL INT iteration
 
-ACC(1) = 0.5
-DEC(1) = 0.5
-VEL(1) = 0.3
-JERK(1) = 10
+ACC(tow) = 0.1
+DEC(tow) = 0.1
+VEL(tow) = 0.1
+JERK(tow) = 1
 
-DoWork=1
+move = 1
 
-while DoWork
-	ptp/re 1, 2.0 ! relative move
-	ptp/re 1, -2.0 ! relative move
-	
-	! ptp/e 1, 2
-	! ptp/e 1, 0
-	
+WHILE move
+	ptp/r tow, 1.0 ! relative move
+	ptp/r tow, -1.0 ! relative move
 END
 
 STOP
@@ -1497,12 +1508,12 @@ STOP
 
 local real target, offset, tsr, U, rpm, tacc, endpos
 
-tsr = 0.1
-U = 1
+tsr = 2.0
+U = 1.0
 rpm = tsr*U/0.5*60/6.28318530718
 
 offset = 0 		! Offset caused by ADV traverse (m)
-target = 24.9 	! Do not exceed 24.9 for traverse at x/D = 1
+target = 24.5 	! Do not exceed 24.9 for traverse at x/D = 1
 endpos = 0		! Where to move carriage at end of tow
 tacc = 5		! Time (in seconds) for turbine angular acceleration
 
@@ -1523,7 +1534,7 @@ HALT(turbine)
 VEL(tow) = 0.5
 VEL(turbine) = 10
 ptp tow, endpos
-ptp/e turbine, 60
+ptp/e turbine, 0
 
 STOP
 
@@ -1533,12 +1544,12 @@ STOP
 
 local real target1, target2, vel1, vel2
 
-target1 = 24
-target2 = 0
-vel1 = 1
+target1 = 4
+target2 = -4
+vel1 = 0.5
 vel2 = 0.5
 
-ACC(tow) = 1
+ACC(tow) = 0.5
 DEC(tow) = 0.5
 JERK(tow)= ACC(tow)*10
 
@@ -1584,7 +1595,7 @@ STOP
 GLOBAL INT homeCounter_AKD
 REAL tsr, U, rpm, tacc
 
-tsr = 2.3
+tsr = 1.9
 U = 1
 rpm = tsr*U/0.5*60/6.28318530718
 tacc = 2
@@ -1604,15 +1615,290 @@ ptp/e turbine, 60
 
 STOP
 
+#10
+! Jogging Program for traverse's z axis
+
+global int JogMode_z
+int AKD_Inputs 
+real JogVel
+
+enable z
+JogVel = 0.015
+
+ACC(z) = 1
+DEC(z) = 1
+JERK(z) = 10
+
+JogMode_z = 1
+
+WHILE JogMode_z 
+	AKD_Inputs = COEREAD/4 (1,0x60fd,0)
+	IF((AKD_Inputs & 65536) = 65536)
+		DISP "JOG MINUS"
+		JOG/v z, -JogVel
+		TILL ((COEREAD/4 (1,0x60fd,0) & 65536) = 0)
+		HALT z
+	END
+	IF((AKD_Inputs & 131072) = 131072)
+		DISP "JOG PLUS"
+		JOG/v z, JogVel
+		TILL ((COEREAD/4 (1,0x60fd,0) & 131072) = 0)
+		HALT z
+	END
+	
+END
+
+STOP
+
+#11
+! Homing for the z-axis
+! 1.183 is with the Vectrino out of the water
+
+global int homeCounter_z
+real jogvel, offset
+
+enable z
+offset = -0.0360 ! -0.00287 for previous setting, -0.0360 revised
+
+jogvel = 0.015
+VEL(z) = jogvel
+ACC(z) = 100
+DEC(z) = 100
+JERK(z) = 1000
+
+
+JOG/v z, -jogvel
+TILL FAULT(1).#LL = 1
+KILL(z)
+FCLEAR(z)
+DISABLE(z)
+
+SET RPOS(z) = offset
+
+ENABLE z
+
+homeCounter_z = homeCounter_z + 1
+
+STOP
+
+#12
+! Homing for the y-axis
+
+global int homeCounter_y
+local real jogvel, offset
+
+enable y
+offset = -1.5263
+
+jogvel = 0.015
+VEL(y) = jogvel
+ACC(y) = 100
+DEC(y) = 100
+JERK(y) = 1000
+
+
+JOG/v 0, -jogvel
+TILL FAULT(0).#LL = 1
+KILL(y)
+FCLEAR(y)
+DISABLE(y)
+
+SET RPOS(y) = offset
+
+ENABLE y
+
+homeCounter_y = homeCounter_y + 1
+
+STOP
+
+#13
+! Jogging Program for traverse's y axis
+
+global int JogMode_y
+int AKD_Inputs 
+real JogVel
+
+enable y
+JogVel = 0.02
+
+ACC(y) = 1
+DEC(y) = 1
+JERK(y) = 10
+
+JogMode_y = 1
+
+WHILE JogMode_y 
+	AKD_Inputs = COEREAD/4 (1,0x60fd,0)
+	IF((AKD_Inputs & 65536) = 65536)
+		DISP "JOG MINUS"
+		JOG/v y, -JogVel
+		TILL ((COEREAD/4 (1,0x60fd,0) & 65536) = 0)
+		HALT y
+	END
+	IF((AKD_Inputs & 131072) = 131072)
+		DISP "JOG PLUS"
+		JOG/v y, JogVel
+		TILL ((COEREAD/4 (1,0x60fd,0) & 131072) = 0)
+		HALT y
+	END
+	
+END
+
+#14
+! This program does a back and forth move on the traverse y axis
+
+global int DoWork
+local int iteration
+
+ACC(y) = 0.05
+DEC(y) = 0.05
+VEL(y) = 0.02
+JERK(y) = 5
+
+DoWork=1
+
+while DoWork
+	ptp/re y, 0.1 ! relative move
+	ptp/re y, -0.1 ! relative move
+	
+	! ptp/e 1, 2
+	! ptp/e 1, 0
+	
+END
+
+STOP
+
+#15
+! Circular motion using the y- and z-axes
+! To stop just type "move = 0" in the terminal
+! z = 1.44 m is nice and out of the water
+
+GLOBAL INT move, homeCounter_y, homeCounter_z
+LOCAL REAL velocity
+move = 1
+velocity = 0.026
+
+IF homeCounter_y < 1
+	START 12, 1
+END
+
+IF homeCounter_z < 1
+	START 11, 1
+END
+
+TILL homeCounter_y > 0 & homeCounter_z > 0
+
+VEL(0) = velocity
+VEL(1) = velocity
+ACC(0) = 0.02
+DEC(0) = 0.02
+ACC(1) = 0.02
+DEC(1) = 0.02
+
+ENABLE y
+ENABLE z
+
+PTP/e (0,1), 0, 0.8
+START 3, 1 ! Starts reciprocating motion on tow axis (buffer 3)
+
+MSEG/c (0,1), 0, 0.8
+ARC1 (0,1), 0, 0.7, 0, 0.8,-
+ENDS (0,1)
+
+TILL move <> 1
+
+HALT(0,1,5)
+PTP (0,1), 0, 0.8
+PTP tow, 0
+
+STOP
+
+#16
+! This program just sets move = 0 
+! Just used for the demo
+GLOBAL INT move
+
+move = 0
+
+STOP
+
+#19
+local real target, tsr, U, rpm, tacc, endpos, tzero 
+global real data(3)(100) 
+global real start_time 
+global int collect_data 
+collect_data = 0 
+ 
+tsr = 1.9
+U = 1.2
+
+rpm = tsr*U/0.5*60/6.28318530718
+
+target = 24.5   ! Do not exceed 24.9 for traverse at x/D = 1
+endpos = 0      ! Where to move carriage at end of tow
+tacc = 5        ! Time (in seconds) for turbine angular acceleration
+tzero = 2.5       ! Time (in seconds) to wait before starting
+
+VEL(5) = 0.5
+ptp/e 5, 0
+
+ACC(5) = 1
+DEC(5) = 0.5
+VEL(5) = U
+JERK(5)= ACC(5)*10
+
+! Set modulo on turbine axis (only needed if using simulator)
+! DISABLE 4
+! SLPMAX(4) = 60
+! SLPMIN(4) = 0
+! MFLAGS(4).#MODULO = 1
+
+ACC(4) = rpm/tacc
+VEL(4) = rpm
+DEC(4) = ACC(4)
+JERK(4)= ACC(4)*10
+
+! Move turbine to zero if necessary
+if RPOS(4) <> 60 & RPOS(4) <> 0
+    ptp 4, 0
+end
+
+! Allow oscillations in shaft to damp out
+wait 3000
+
+! Start controller data acquisition and send trigger pulse in same cycle
+BLOCK
+    ! Define start time from now
+    start_time = TIME
+    collect_data = 1
+    DC/c data, 100, 1.0, TIME, FVEL(5), FVEL(4)
+    ! Send trigger pulse for data acquisition
+    OUT1.16 = 0
+END
+
+wait tzero*1000
+jog/v 4, rpm
+wait tacc*1000
+ptp/e 5, target
+HALT(4)
+VEL(5) = 0.5
+VEL(4) = 10
+ptp 4, 0
+ptp/e 5, 0
+STOPDC
+collect_data = 0
+OUT1.16 = 1
+
+STOP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
 #A
 !axisdef X=0,Y=1,Z=2,T=3,A=4,B=5,C=6,D=7
 !axisdef x=0,y=1,z=2,t=3,a=4,b=5,c=6,d=7
 global int I(100),I0,I1,I2,I3,I4,I5,I6,I7,I8,I9,I90,I91,I92,I93,I94,I95,I96,I97,I98,I99
 global real V(100),V0,V1,V2,V3,V4,V5,V6,V7,V8,V9,V90,V91,V92,V93,V94,V95,V96,V97,V98,V99
 
-axisdef tow=5
-axisdef turbine=4
-axisdef X=0, Y=1
+axisdef tow=5, turbine=4, y=0, z=1
 
 !!! EtherCAT / CiA402 Variables
 global int M_ST(32)           ! Motor state for 3rd party drives
@@ -1659,4 +1945,6 @@ GLOBAL REAL FRQ_PER_DECADE
 GLOBAL REAL BODE_DATA(1000)(3)
 GLOBAL REAL FRF_SINE_WAVE
 
+!!! AKD digital I/O (already mapped to OUT1, so commented out
+! GLOBAL INT AKD_IN, AKD_OUT
 
