@@ -1,5 +1,5 @@
 #/ Controller version = 2.10
-#/ Date = 3/18/2013 6:54 PM
+#/ Date = 4/8/2013 10:27 AM
 #/ User remarks = 
 #0
 !!!!!!!!!!!!!!! EtherCAT Setup Buffer !!!!!!!!!!!!!!!
@@ -104,12 +104,12 @@ ECUNMAP
 !!! - User must go to each subroutine corresponding to a used axis and properly define ECIN / ECOUT offsets
 !!! - Only uncomment axes that are actually used
 
-CALL MAP_AXIS1
 !CALL MAP_AXIS0
+!CALL MAP_AXIS1
 !CALL MAP_AXIS2
 !CALL MAP_AXIS3
 !CALL MAP_AXIS4
-!CALL MAP_AXIS5
+CALL MAP_AXIS5
 !CALL MAP_AXIS6
 !CALL MAP_AXIS7
 !CALL MAP_AXIS8
@@ -362,15 +362,15 @@ RET
 MAP_AXIS5:
 	AXIS = 5
 	!!! Map inputs
-	ECIN(0, SW(AXIS)) ! statusword
-	ECIN(0, MoOD(AXIS)) ! modes of operation display
-	ECIN(0, D_IN(AXIS)) ! digital inputs
-	ECIN(0, F_POS(AXIS)) ! feedback position
-	ECIN(0, P_ERR(AXIS)) ! position error
-	ECIN(0, F_TORQUE(AXIS)) ! feedback torque
-	ECIN(0, T_PROBE_STATUS(AXIS)) ! touch probe status
-	ECIN(0, T_PROBE_POS(AXIS)) ! touch probe positive value
-	ECIN(0, T_PROBE_NEG(AXIS)) ! touch probe negative value
+	ECIN(182, SW(AXIS)) ! statusword
+	ECIN(180, MoOD(AXIS)) ! modes of operation display
+	!ECIN(0, D_IN(AXIS)) ! digital inputs
+	ECIN(170, F_POS(AXIS)) ! feedback position
+	ECIN(176, P_ERR(AXIS)) ! position error
+	!ECIN(0, F_TORQUE(AXIS)) ! feedback torque
+	!ECIN(0, T_PROBE_STATUS(AXIS)) ! touch probe status
+	!ECIN(0, T_PROBE_POS(AXIS)) ! touch probe positive value
+	!ECIN(0, T_PROBE_NEG(AXIS)) ! touch probe negative value
 	
 	!!! Initialize outputs
 	CW(AXIS) = 0
@@ -380,12 +380,12 @@ MAP_AXIS5:
 	R_TORQUE(AXIS) = 0
 	
 	!!! Map outputs
-	ECOUT(0, CW(AXIS)) ! controlword
-	ECOUT(0, MoO(AXIS)) ! modes of operation
-	ECOUT(0, D_OUT(AXIS)) ! digital outputs
-	ECOUT(0, R_POS(AXIS)) ! reference position
-	ECOUT(0, R_TORQUE(AXIS)) ! reference torque
-	ECOUT(0, T_PROBE_FUNC(AXIS)) ! touch probe function
+	ECOUT(182, CW(AXIS)) ! controlword
+	ECOUT(180, MoO(AXIS)) ! modes of operation
+	!ECOUT(0, D_OUT(AXIS)) ! digital outputs
+	ECOUT(170, R_POS(AXIS)) ! reference position
+	!ECOUT(0, R_TORQUE(AXIS)) ! reference torque
+	!ECOUT(0, T_PROBE_FUNC(AXIS)) ! touch probe function
 RET
 
 MAP_AXIS6:
@@ -1171,7 +1171,7 @@ INT HOME_COUNTER
 INT FAULT_CLEAR_COUNTER
 
 !!! Variable Initialization
-AXIS = 1
+AXIS = 5
 SLAVE_ID = 0
 
 !!! Disable axis
@@ -1610,8 +1610,9 @@ STOP
 global int I(100),I0,I1,I2,I3,I4,I5,I6,I7,I8,I9,I90,I91,I92,I93,I94,I95,I96,I97,I98,I99
 global real V(100),V0,V1,V2,V3,V4,V5,V6,V7,V8,V9,V90,V91,V92,V93,V94,V95,V96,V97,V98,V99
 
-axisdef tow=1
-axisdef turbine=0
+axisdef tow=5
+axisdef turbine=4
+axisdef X=0, Y=1
 
 !!! EtherCAT / CiA402 Variables
 global int M_ST(32)           ! Motor state for 3rd party drives
