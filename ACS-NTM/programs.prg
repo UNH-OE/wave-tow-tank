@@ -1,5 +1,5 @@
 #/ Controller version = 2.21
-#/ Date = 3/11/2014 4:43 AM
+#/ Date = 8/26/2014 5:50 PM
 #/ User remarks = 
 #0
 !!!!!!!!!!!!!!! EtherCAT Setup Buffer !!!!!!!!!!!!!!!
@@ -1819,6 +1819,21 @@ STOP
 GLOBAL INT move
 
 move = 0
+
+STOP
+
+#18
+REAL trigger_pos
+
+trigger_pos = 4.0
+
+WHILE 1
+	IF RPOS(5) > trigger_pos
+		OUT1.16 = 1
+	ELSE
+		OUT1.16 = 0
+	END
+END
 
 STOP
 
