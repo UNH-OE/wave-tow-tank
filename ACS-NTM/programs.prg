@@ -1,5 +1,5 @@
 #/ Controller version = 2.21
-#/ Date = 1/18/2015 12:27 AM
+#/ Date = 2/5/2015 9:05 PM
 #/ User remarks = 
 #0
 !!!!!!!!!!!!!!! EtherCAT Setup Buffer !!!!!!!!!!!!!!!
@@ -1414,6 +1414,8 @@ ON PST(SYSINFO(3)).#RUN = 0; START SYSINFO(3), 1; RET
 
 GLOBAL INT homeCounter_tow
 
+DISABLE tow
+
 MoO(tow) = 6
 TILL MoOD(tow) = 6
 ENABLE (tow)
@@ -1544,10 +1546,10 @@ STOP
 
 local real target1, target2, vel1, vel2
 
-target1 = 16
-target2 = 2
+target1 = 4
+target2 = -4
 vel1 = 0.5
-vel2 = 0.2
+vel2 = 0.5
 
 ACC(tow) = 0.5
 DEC(tow) = 0.5
@@ -1625,9 +1627,9 @@ real JogVel
 enable z
 JogVel = 0.015
 
-ACC(z) = 1
-DEC(z) = 1
-JERK(z) = 10
+ACC(z) = 10
+DEC(z) = 10
+JERK(z) = 100
 
 JogMode_z = 1
 
@@ -1825,13 +1827,13 @@ STOP
 #18
 REAL trigger_pos
 
-trigger_pos = 5.0
+trigger_pos = 4.0
 
 WHILE 1
 	IF RPOS(5) > trigger_pos
-		OUT1.16 = 0
-	ELSE
 		OUT1.16 = 1
+	ELSE
+		OUT1.16 = 0
 	END
 END
 
