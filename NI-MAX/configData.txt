@@ -1,5 +1,5 @@
 ﻿[DAQmx]	MajorVersion	MinorVersion	
-	14	0	
+	15	1	
 
 [DAQmxChannel]	AI.ChanCal.ApplyCalIfExp	AI.ChanCal.CalDate	AI.ChanCal.Desc	AI.ChanCal.EnableCal	AI.ChanCal.ExpDate	AI.ChanCal.HasValidCalInfo	AI.ChanCal.OperatorName	AI.ChanCal.ScaleType	AI.ChanCal.Table.PreScaledVals	AI.ChanCal.Table.ScaledVals	AI.ChanCal.Verif.AcqVals	AI.ChanCal.Verif.RefVals	AI.CustomScaleName	AI.Max	AI.MeasType	AI.Min	AI.TermCfg	AI.Voltage.Units	ChanType	Descr	PhysicalChanName	
 GenVoltage														10	Voltage	-10	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod1/ai1	
@@ -19,7 +19,6 @@ MyForceChannel_0	Full Bridge	mVolts/Volt	350	Pounds	Two-Point Linear	1			0	0	2	1
 [DAQmxChannel]	AI.Bridge.Cfg	AI.Bridge.NomResistance	AI.Bridge.ScaleType	AI.Bridge.ShuntCal.GainAdjust	AI.Bridge.Units	AI.CustomScaleName	AI.Excit.Src	AI.Excit.Val	AI.Max	AI.MeasType	AI.Min	ChanType	Descr	PhysicalChanName	
 drag_left	Full Bridge	350	None	1	From Custom Scale	drag_left_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input		cDAQ9188-16D66BBMod3/ai1	
 drag_right	Full Bridge	350	None	1	From Custom Scale	drag_right_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input		cDAQ9188-16D66BBMod3/ai2	
-DragCellCal	Full Bridge	350	None	1	Volts/Volt		Internal	10	0.0030000000000000001	More:Bridge (V/V)	-0.0030000000000000001	Analog Input		cDAQ9188-16D66BBMod2/ai2	
 torque_arm	Full Bridge	350	None	1	From Custom Scale	torque_arm_scale	Internal	10	200	More:Bridge (V/V)	-200	Analog Input		cDAQ9188-16D66BBMod3/ai0	
 
 [DAQmxChannel]	ChanType	CI.CountEdges.ActiveEdge	CI.CountEdges.Dir	CI.CountEdges.InitialCnt	CI.MeasType	Descr	PhysicalChanName	
@@ -48,7 +47,7 @@ WaveStaff 1	0.29999999999999999	0	Volts	Meters	Linear
 Dev1	USB	0x138B24E	0x7270	USB-6211	
 
 [DAQmxCDAQChassis]	BusType	DevSerialNum	ProductType	TCPIP.DevIsReserved	TCPIP.EthernetIP	TCPIP.EthernetMAC	TCPIP.EthernetMDNSServiceInstance	TCPIP.Hostname	
-cDAQ9188-16D66BB	TCP/IP	0x16D66BB	cDAQ-9188	1	169.254.93.129	00:80:2F:13:B7:E7	NI cDAQ-9188 016D66BB	cDAQ9188-16D66BB	
+cDAQ9188-16D66BB	TCP/IP	0x16D66BB	cDAQ-9188	0	169.254.216.122	00:80:2F:13:B7:E7	NI cDAQ-9188 016D66BB	cDAQ9188-16D66BB	
 
 [DAQmxCDAQModule]	CompactDAQ.ChassisDevName	CompactDAQ.SlotNum	DevSerialNum	ProductType	
 cDAQ9188-16D66BBMod1	cDAQ9188-16D66BB	1	0x1763311	NI 9401	
