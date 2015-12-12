@@ -1,5 +1,5 @@
-UNH tow/wave tank
-=================
+UNH wave & tow tank
+===================
 
 [![Stories in Ready](https://badge.waffle.io/unh-oe/tow-tank.png?label=ready&title=Ready)](https://waffle.io/unh-oe/tow-tank)
 
