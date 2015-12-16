@@ -1,7 +1,7 @@
 UNH wave & tow tank
 ===================
 
-[![Stories in Ready](https://badge.waffle.io/unh-oe/tow-tank.png?label=ready&title=Ready)](https://waffle.io/unh-oe/tow-tank)
+[![Stories in Ready](https://badge.waffle.io/unh-oe/wave-tow-tank.png?label=ready&title=Ready)](https://waffle.io/unh-oe/wave-tow-tank)
 
 
 This repo was created to version control the wave/tow tank configuration files 
