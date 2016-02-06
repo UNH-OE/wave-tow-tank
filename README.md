@@ -7,6 +7,6 @@ UNH wave & tow tank
 This repo was created to version control the wave/tow tank configuration files 
 and use GitHub's issue tracker for issues with UNH's wave/tow tank. For 
 documentation, see the 
-[UNH OE Lab Wiki](https://marine.unh.edu/oelab/wiki/doku.php?id=tow_tank:start).
-Note that the issue tracker also embedded into the wiki's
-[Wave/tow tank to-do page](https://marine.unh.edu/oelab/wiki/doku.php?id=tow_tank:to-do:start).
+[wiki](https://github.com/UNH-OE/wave-tow-tank/wiki).
+To report or discuss issues with the wave/tow tank systems, see the 
+[issue tracker](https://github.com/UNH-OE/wave-tow-tank/issues).
