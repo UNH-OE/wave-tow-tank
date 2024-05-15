@@ -1,5 +1,5 @@
-#/ Controller version = 2.21
-#/ Date = 2/5/2015 9:05 PM
+#/ Controller version = 2.40
+#/ Date = 5/15/2024 1:37 PM
 #/ User remarks = 
 #0
 !!!!!!!!!!!!!!! EtherCAT Setup Buffer !!!!!!!!!!!!!!!
@@ -166,7 +166,7 @@ BLOCK
 	!START 17,1
 	!START 18,1
 	!START 19,1
-	!START 20,1
+	START 20,1
 	!START 21,1
 	!START 22,1
 	!START 23,1
@@ -369,11 +369,11 @@ RET
 MAP_AXIS5:
 	AXIS = 5
 	!!! Map inputs
-	ECIN(182, SW(AXIS)) ! statusword
-	ECIN(180, MoOD(AXIS)) ! modes of operation display
+	ECIN(ECGETOFFSET("Status word", 0), SW(AXIS)) ! statusword
+	ECIN(ECGETOFFSET("Operation mode display", 0), MoOD(AXIS)) ! modes of operation display
 	!ECIN(0, D_IN(AXIS)) ! digital inputs
-	ECIN(170, F_POS(AXIS)) ! feedback position
-	ECIN(176, P_ERR(AXIS)) ! position error
+	ECIN(ECGETOFFSET("Position actual value", 0), F_POS(AXIS)) ! feedback position
+	ECIN(ECGETOFFSET("Following error", 0), P_ERR(AXIS)) ! position error
 	!ECIN(0, F_TORQUE(AXIS)) ! feedback torque
 	!ECIN(0, T_PROBE_STATUS(AXIS)) ! touch probe status
 	!ECIN(0, T_PROBE_POS(AXIS)) ! touch probe positive value
@@ -387,10 +387,10 @@ MAP_AXIS5:
 	R_TORQUE(AXIS) = 0
 	
 	!!! Map outputs
-	ECOUT(182, CW(AXIS)) ! controlword
-	ECOUT(180, MoO(AXIS)) ! modes of operation
+	ECOUT(ECGETOFFSET("Control word", 0), CW(AXIS)) ! controlword
+	ECOUT(ECGETOFFSET("Operation mode", 0), MoO(AXIS)) ! modes of operation
 	!ECOUT(0, D_OUT(AXIS)) ! digital outputs
-	ECOUT(170, R_POS(AXIS)) ! reference position
+	ECOUT(ECGETOFFSET("Position demand value", 0), R_POS(AXIS)) ! reference position
 	!ECOUT(0, R_TORQUE(AXIS)) ! reference torque
 	!ECOUT(0, T_PROBE_FUNC(AXIS)) ! touch probe function
 RET
@@ -1627,9 +1627,9 @@ real JogVel
 enable z
 JogVel = 0.015
 
-ACC(z) = 10
-DEC(z) = 10
-JERK(z) = 100
+ACC(z) = 100
+DEC(z) = 100
+JERK(z) = 1000
 
 JogMode_z = 1
 
@@ -1723,9 +1723,9 @@ real JogVel
 enable y
 JogVel = 0.02
 
-ACC(y) = 1
-DEC(y) = 1
-JERK(y) = 10
+ACC(y) = 100
+DEC(y) = 100
+JERK(y) = 1000
 
 JogMode_y = 1
 
@@ -1824,6 +1824,131 @@ move = 0
 
 STOP
 
+#17
+
+! AUTO-GENERATED -- CHANGES WILL BE OVERWRITTEN
+! Here we will try to continuously collect data from the INF4
+global int inf4_data(8)(100) ! 8 columns and 100 rows
+global int collect_data
+global real start_time
+local int sample_period_ms
+sample_period_ms = 2
+global real ch1_force, ch2_force, ch3_force, ch4_force
+global real inf4_data_processed(5)(100)
+
+local int subtract_value
+subtract_value = 16777215
+local int sign_value
+
+ECIN(ECGETOFFSET("1 Byte In (0)", 4), DI0) ! CH1, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (1)", 4), DI1) ! CH1, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (2)", 4), DI2) ! CH1, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (3)", 4), DI3) ! CH1, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (4)", 4), DI4) ! CH2, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (5)", 4), DI5) ! CH2, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (6)", 4), DI6) ! CH2, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (7)", 4), DI7) ! CH2, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (8)", 4), DI8) ! CH3, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (9)", 4), DI9) ! CH3, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (10)", 4), DI10) ! CH3, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (11)", 4), DI11) ! CH3, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (12)", 4), DI12) ! CH4, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (13)", 4), DI13) ! CH4, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (14)", 4), DI14) ! CH4, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (15)", 4), DI15) ! CH4, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (16)", 4), DI16) ! Digital Outputs 1st Byte in Default Mode
+ECIN(ECGETOFFSET("1 Byte In (17)", 4), DI17) ! Digital Outputs 2nd Byte in Default Mode
+
+! Mapping all digital outputs from INF4 to ASCPL+ variables
+
+ECOUT(ECGETOFFSET("1 Byte Out (0)", 4), DO0) ! Command Register 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (1)", 4), DO1) ! Command Register 2nd Byte
+
+ECOUT(ECGETOFFSET("1 Byte Out (2)", 4), DO2) ! Digital Outputs Command 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (3)", 4), DO3) ! Digital Outputs Command 2nd Byte
+
+ECOUT(ECGETOFFSET("1 Byte Out (4)", 4), DO4) ! Exchange Register 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (5)", 4), DO5) ! Exchange Register 2nd Byte
+ECOUT(ECGETOFFSET("1 Byte Out (6)", 4), DO6) ! Exchange Register 3rd Byte
+ECOUT(ECGETOFFSET("1 Byte Out (7)", 4), DO7) ! Exchange Register 4th Byte
+
+! Put into high res mode
+DO1 = 25
+
+BLOCK
+    ! Define start time from now
+    start_time = TIME
+    collect_data = 1
+    ! TODO: We probably want to collect FPOS and FVEL from the AFT axis as well
+    DC/c inf4_data_processed, 100, sample_period_ms, TIME, ch1_force, ch2_force, ch3_force, ch4_force
+END
+
+! Continuously compute processed force values from the INF4
+WHILE collect_data
+    BLOCK
+        ! Compute all force values in the same controller cycle
+        ! Channel 1
+        ch1_force = (DI1 * POW(2,16)) | (DI2 * POW(2,8)) | DI3
+        if DI0
+            sign_value = -1
+            ch1_force = subtract_value - ch1_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch1_force = 5e-6 * ch1_force
+        ! Convert to engineering units [N-m]
+        ch1_force = ch1_force * 15.7085561 * sign_value
+        
+        ! Channel 2
+        ch2_force = (DI5 * POW(2,16)) | (DI6 * POW(2,8)) | DI7
+        if DI4
+            sign_value = -1
+            ch2_force = subtract_value - ch2_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch2_force = 5e-6 * ch2_force 
+        ! Convert to engineering units [N-m]
+        ch2_force = ch2_force * 15.7617411 * sign_value
+        
+        ! Channel 3
+        ch3_force = (DI9 * POW(2,16)) | (DI10 * POW(2,8)) | DI11
+        if DI8
+            sign_value = 1
+            ch3_force = subtract_value - ch3_force
+        else
+            sign_value = -1
+        end
+        ! Convert to mV
+        ch3_force = 5e-6 * ch3_force
+        ! Convert to engineering units [N]
+        ch3_force = ch3_force * 390.354011 * sign_value
+
+        ! Channel 4
+        ch4_force = (DI13 * POW(2,16)) | (DI14 * POW(2,8)) | DI15
+        if DI12
+            sign_value = -1
+            ch4_force = subtract_value - ch4_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch4_force = 5e-6 * ch4_force
+        ! Convert to engineering units [N-m]
+        ch4_force = ch4_force * 23.0479813 * sign_value
+    END
+END
+
+STOPDC
+STOP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
 #18
 REAL trigger_pos
 
@@ -1909,11 +2034,121 @@ OUT1.16 = 1
 STOP
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 
+#20
+! Here we will continuously process data from the INF4
+global real ch1_force, ch2_force, ch3_force, ch4_force
+
+local int subtract_value
+subtract_value = 16777215
+local int sign_value
+
+ECIN(ECGETOFFSET("1 Byte In (0)", 4), DI0) ! CH1, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (1)", 4), DI1) ! CH1, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (2)", 4), DI2) ! CH1, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (3)", 4), DI3) ! CH1, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (4)", 4), DI4) ! CH2, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (5)", 4), DI5) ! CH2, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (6)", 4), DI6) ! CH2, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (7)", 4), DI7) ! CH2, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (8)", 4), DI8) ! CH3, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (9)", 4), DI9) ! CH3, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (10)", 4), DI10) ! CH3, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (11)", 4), DI11) ! CH3, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (12)", 4), DI12) ! CH4, Byte 1 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (13)", 4), DI13) ! CH4, Byte 2 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (14)", 4), DI14) ! CH4, Byte 3 in Hi-Res Mode
+ECIN(ECGETOFFSET("1 Byte In (15)", 4), DI15) ! CH4, Byte 4 in Hi-Res Mode
+
+ECIN(ECGETOFFSET("1 Byte In (16)", 4), DI16) ! Digital Outputs 1st Byte in Default Mode
+ECIN(ECGETOFFSET("1 Byte In (17)", 4), DI17) ! Digital Outputs 2nd Byte in Default Mode
+
+! Mapping all digital outputs from INF4 to ASCPL+ variables
+
+ECOUT(ECGETOFFSET("1 Byte Out (0)", 4), DO0) ! Command Register 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (1)", 4), DO1) ! Command Register 2nd Byte
+
+ECOUT(ECGETOFFSET("1 Byte Out (2)", 4), DO2) ! Digital Outputs Command 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (3)", 4), DO3) ! Digital Outputs Command 2nd Byte
+
+ECOUT(ECGETOFFSET("1 Byte Out (4)", 4), DO4) ! Exchange Register 1st Byte
+ECOUT(ECGETOFFSET("1 Byte Out (5)", 4), DO5) ! Exchange Register 2nd Byte
+ECOUT(ECGETOFFSET("1 Byte Out (6)", 4), DO6) ! Exchange Register 3rd Byte
+ECOUT(ECGETOFFSET("1 Byte Out (7)", 4), DO7) ! Exchange Register 4th Byte
+
+! Put into high res mode
+DO1 = 25
+
+! Continuously compute processed force values from the INF4
+WHILE 1
+    BLOCK
+        ! Compute all force values in the same controller cycle
+        ! Channel 1
+        ch1_force = (DI1 * POW(2,16)) | (DI2 * POW(2,8)) | DI3
+        if DI0
+            sign_value = -1
+            ch1_force = subtract_value - ch1_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch1_force = 5e-6 * ch1_force
+        ! Convert to engineering units [N-m]
+        ch1_force = ch1_force * 15.7085561 * sign_value
+        
+        ! Channel 2
+        ch2_force = (DI5 * POW(2,16)) | (DI6 * POW(2,8)) | DI7
+        if DI4
+            sign_value = -1
+            ch2_force = subtract_value - ch2_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch2_force = 5e-6 * ch2_force 
+        ! Convert to engineering units [N-m]
+        ch2_force = ch2_force * 15.7617411 * sign_value
+        
+        ! Channel 3
+        ch3_force = (DI9 * POW(2,16)) | (DI10 * POW(2,8)) | DI11
+        if DI8
+            sign_value = 1
+            ch3_force = subtract_value - ch3_force
+        else
+            sign_value = -1
+        end
+        ! Convert to mV
+        ch3_force = 5e-6 * ch3_force
+        ! Convert to engineering units [N]
+        ch3_force = ch3_force * 390.354011 * sign_value
+
+        ! Channel 4
+        ch4_force = (DI13 * POW(2,16)) | (DI14 * POW(2,8)) | DI15
+        if DI12
+            sign_value = -1
+            ch4_force = subtract_value - ch4_force
+        else
+            sign_value = 1
+        end
+        ! Convert to mV
+        ch4_force = 5e-6 * ch4_force
+        ! Convert to engineering units [N-m]
+        ch4_force = ch4_force * 23.0479813 * sign_value
+    END
+END
+
+STOP
+
 #A
 !axisdef X=0,Y=1,Z=2,T=3,A=4,B=5,C=6,D=7
 !axisdef x=0,y=1,z=2,t=3,a=4,b=5,c=6,d=7
 global int I(100),I0,I1,I2,I3,I4,I5,I6,I7,I8,I9,I90,I91,I92,I93,I94,I95,I96,I97,I98,I99
 global real V(100),V0,V1,V2,V3,V4,V5,V6,V7,V8,V9,V90,V91,V92,V93,V94,V95,V96,V97,V98,V99
+
+global int DI0, DI1, DI2, DI3, DI4, DI5, DI6, DI7, DI8, DI9, DI10, DI11, DI12, DI13, DI14, DI15, DI16, DI17
+global int DO0, DO1, DO2, DO3, DO4, DO5, DO6, DO7
 
 axisdef tow=5, turbine=4, y=0, z=1
 
