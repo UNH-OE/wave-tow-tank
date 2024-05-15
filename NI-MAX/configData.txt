@@ -1,58 +1,88 @@
-﻿[DAQmx]	MajorVersion	MinorVersion	
-	14	0	
+[DAQmx]	MajorVersion	MinorVersion	
+	23	0	
 
-[DAQmxChannel]	AI.ChanCal.ApplyCalIfExp	AI.ChanCal.CalDate	AI.ChanCal.Desc	AI.ChanCal.EnableCal	AI.ChanCal.ExpDate	AI.ChanCal.HasValidCalInfo	AI.ChanCal.OperatorName	AI.ChanCal.ScaleType	AI.ChanCal.Table.PreScaledVals	AI.ChanCal.Table.ScaledVals	AI.ChanCal.Verif.AcqVals	AI.ChanCal.Verif.RefVals	AI.CustomScaleName	AI.Max	AI.MeasType	AI.Min	AI.TermCfg	AI.Voltage.Units	ChanType	Descr	PhysicalChanName	
-GenVoltage														10	Voltage	-10	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod1/ai1	
-toby														5	Voltage	0	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod1/ai1	
-torque_trans													torque_trans_scale	200	Voltage	-200	Differential	From Custom Scale	Analog Input		cDAQ9188-16D66BBMod2/ai0	
-WaveStaff 1													TobyandMattWizardryLessonsV2m	1.5	Voltage	0	Differential	From Custom Scale	Analog Input		cDAQ9188-16D66BBMod1/ai1	
-WaveStaff_Akamina	1	2014-3-17T19:42:59Z UTC		1	2015-3-17T19:43:0Z UTC	1	Toby	Table	-0.56555372668502879, 0.04638346143180163, 0.56317212678024919, 0.55900000000000005	-0.56559999999999999, 0.0344, 0.53439999999999999, 0.55900000000000005			Wave_Staff_Akamina	0.55900000000000005	Voltage	-0.55900000000000005	Differential	From Custom Scale	Analog Input		cDAQ9188-16D66BBMod1/ai4	
+[DAQmxChannel]	AI.ADCTimingMode	AI.Excit.Src	AI.Excit.Val	AI.Max	AI.MeasType	AI.Min	AI.ResistanceCfg	AI.RTD.R0	AI.RTD.Type	AI.Temp.Units	ChanType	Descr	PhysicalChanName	
+aft_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai3	
+fore_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai2	
+resistor_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai0	
+yaskawa_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai1	
+MyTemperatureTask/Temperature	High Resolution	Internal	0.0005	100	Temperature:RTD	0	4-Wire	100	Pt3750	Deg C	Analog Input		cDAQ9188-1F86F67Mod2/ai0	
 
-[DAQmxChannel]	AI.Bridge.Cfg	AI.Bridge.ElectricalUnits	AI.Bridge.NomResistance	AI.Bridge.PhysicalUnits	AI.Bridge.ScaleType	AI.Bridge.ShuntCal.GainAdjust	AI.Bridge.Table.ElectricalVals	AI.Bridge.Table.PhysicalVals	AI.Bridge.TwoPointLin.First.ElectricalVal	AI.Bridge.TwoPointLin.First.PhysicalVal	AI.Bridge.TwoPointLin.Second.ElectricalVal	AI.Bridge.TwoPointLin.Second.PhysicalVal	AI.Excit.Src	AI.Excit.Val	AI.Force.Units	AI.Max	AI.MeasType	AI.Min	ChanType	Descr	PhysicalChanName	
-500lb_LC	Full Bridge	mVolts/Volt	350	Pounds	Table	1	0, 1.873	-1.73, 500					Internal	2.5	Pounds	500	Force:Bridge	0	Analog Input		cDAQ9188-16D66BBMod2/ai0	
-LC 10lb-1	Full Bridge	mVolts/Volt	359	Pounds	Table	1	0, 0.45300000000000001, 0.90480000000000005, 1.3589, 1.8122, 2.262, 2.3500000000000001	-0.375, 1.625, 3.625, 5.625, 7.625, 9.625, 10					Internal	2.5	Pounds	10	Force:Bridge	0	Analog Input		cDAQ9188-16D66BBMod2/ai0	
-LC 10lb-2	Full Bridge	mVolts/Volt	359	Pounds	Table	1	0, 0.44390000000000002, 0.88819999999999999, 1.3321000000000001, 1.7762, 2.2206000000000001, 2.2269999999999999	-0.23899999999999999, 1.7609999999999999, 3.7610000000000001, 5.7610000000000001, 7.7610000000000001, 9.7609999999999992, 10					Internal	2.5	Pounds	10	Force:Bridge	0	Analog Input		cDAQ9188-16D66BBMod2/ai3	
-LC 25lb	Full Bridge	mVolts/Volt	360	Pounds	Table	1	0, 0.43680000000000002, 0.87360000000000004, 1.3108, 1.7477, 2.1852999999999998, 2.2729400000000002	-0.065000000000000002, 4.9349999999999996, 9.9350000000000005, 14.935, 19.934999999999999, 24.934999999999999, 25					Internal	2.5	Pounds	25	Force:Bridge	0	Analog Input		cDAQ9188-16D66BBMod2/ai0	
-MyForceChannel	Full Bridge	mVolts/Volt	350	Pounds	Two-Point Linear	1			0	0	2	100	Internal	2.5	Pounds	100	Force:Bridge	-100	Analog Input		cDAQ9188-16D66BBMod2/ai0	
-MyForceChannel_0	Full Bridge	mVolts/Volt	350	Pounds	Two-Point Linear	1			0	0	2	100	Internal	2.5	Pounds	100	Force:Bridge	-100	Analog Input		cDAQ9188-16D66BBMod2/ai0	
+[DAQmxChannel]	AI.ADCTimingMode	AI.CustomScaleName	AI.Max	AI.MeasType	AI.Min	AI.TermCfg	AI.Voltage.Units	ChanType	Descr	PhysicalChanName	
+torque_trans		torque_trans_scale	200	Voltage	-200	Differential	From Custom Scale	Analog Input	Torque transducer (Interface blue on test bed shaft).	cDAQ9188-16D66BBMod2/ai0	
+9205_ai1/Voltage			10	Voltage	-10	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod2/ai1	
+9205_ai10/Voltage			10	Voltage	-10	RSE	Volts	Analog Input		cDAQ9188-16D66BBMod2/ai10	
+9219_ch2/Voltage	High Resolution		60	Voltage	-60	Differential	Volts	Analog Input		cDAQ9188-1F86F67Mod2/ai2	
+accel_wavestaff/Voltage			10	Voltage	-10	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod2/ai2	
+akima probe/Voltage			5	Voltage	-5	Differential	Volts	Analog Input		cDAQ9188-16D66BBMod2/ai2	
+
+[DAQmxChannel]	AI.Accel.dBRef	AI.Accel.Sensitivity	AI.Accel.SensitivityUnits	AI.Accel.Units	AI.Coupling	AI.Excit.Src	AI.Excit.Val	AI.Excit.VoltageOrCurrent	AI.Max	AI.MeasType	AI.Min	AI.TermCfg	ChanType	PhysicalChanName	
+9230_ch0/Acceleration	1	100.8	mVolts/g	g	AC	Internal	0.004	Current	5	Accelerometer	-5	Pseudodifferential	Analog Input	cDAQ9188-16D66BBMod7/ai0	
+9230_ch2/Acceleration	1	1000	mVolts/g	g	AC	Internal	0.004	Current	5	Accelerometer	-5	Pseudodifferential	Analog Input	cDAQ9188-16D66BBMod7/ai2	
+accel_wavestaff/Acceleration	1	100.8	mVolts/g	g	AC	Internal	0.004	Current	5	Accelerometer	-5	Pseudodifferential	Analog Input	cDAQ9188-16D66BBMod7/ai0	
+pcb_3713F112G_x/Acceleration	1	1000	mVolts/g	g	AC	Internal	0.004	Current	5	Accelerometer	-5	Pseudodifferential	Analog Input	cDAQ9188-16D66BBMod7/ai0	
+
+[DAQmxChannel]	AI.Bridge.Cfg	AI.Bridge.ElectricalUnits	AI.Bridge.NomResistance	AI.Bridge.PhysicalUnits	AI.Bridge.ScaleType	AI.Bridge.ShuntCal.GainAdjust	AI.Bridge.TwoPointLin.First.ElectricalVal	AI.Bridge.TwoPointLin.First.PhysicalVal	AI.Bridge.TwoPointLin.Second.ElectricalVal	AI.Bridge.TwoPointLin.Second.PhysicalVal	AI.Excit.Src	AI.Excit.Val	AI.Force.Units	AI.Max	AI.MeasType	AI.Min	ChanType	PhysicalChanName	
+load1/Force	Full Bridge	mVolts/Volt	350	Pounds	Two-Point Linear	1	0	0	2	100	Internal	2.5	Pounds	100	Force:Bridge	-100	Analog Input	cDAQ9188-16D66BBMod6/ai1	
+load2/Force	Full Bridge	mVolts/Volt	350	Pounds	Two-Point Linear	1	0	0	2	100	Internal	2.5	Pounds	100	Force:Bridge	-100	Analog Input	cDAQ9188-16D66BBMod6/ai2	
 
 [DAQmxChannel]	AI.Bridge.Cfg	AI.Bridge.NomResistance	AI.Bridge.ScaleType	AI.Bridge.ShuntCal.GainAdjust	AI.Bridge.Units	AI.CustomScaleName	AI.Excit.Src	AI.Excit.Val	AI.Max	AI.MeasType	AI.Min	ChanType	Descr	PhysicalChanName	
-drag_left	Full Bridge	350	None	1	From Custom Scale	drag_left_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input		cDAQ9188-16D66BBMod3/ai1	
-drag_right	Full Bridge	350	None	1	From Custom Scale	drag_right_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input		cDAQ9188-16D66BBMod3/ai2	
-DragCellCal	Full Bridge	350	None	1	Volts/Volt		Internal	10	0.0030000000000000001	More:Bridge (V/V)	-0.0030000000000000001	Analog Input		cDAQ9188-16D66BBMod2/ai2	
-torque_arm	Full Bridge	350	None	1	From Custom Scale	torque_arm_scale	Internal	10	200	More:Bridge (V/V)	-200	Analog Input		cDAQ9188-16D66BBMod3/ai0	
+drag_left	Full Bridge	350	None	1	From Custom Scale	drag_left_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input	Drag left load cell (facing the wavemaker).\nS/N:	cDAQ9188-16D66BBMod3/ai2	
+drag_right	Full Bridge	350	None	1	From Custom Scale	drag_right_scale	Internal	10	2224	More:Bridge (V/V)	-2224	Analog Input		cDAQ9188-16D66BBMod3/ai1	
+LF_left	Full Bridge	350	None	1	From Custom Scale	LF_left_scale	Internal	10	4448	More:Bridge (V/V)	-4448	Analog Input		cDAQ9188-16D66BBMod6/ai0	
+LF_right	Full Bridge	350	None	1	From Custom Scale	LF_right_scale	Internal	10	4448	More:Bridge (V/V)	-4448	Analog Input		cDAQ9188-16D66BBMod6/ai1	
+torque_arm	Full Bridge	350	None	1	From Custom Scale	torque_arm_scale	Internal	10	200	More:Bridge (V/V)	-200	Analog Input	Redundant torque measurement from torque arm.	cDAQ9188-16D66BBMod3/ai0	
 
-[DAQmxChannel]	ChanType	CI.CountEdges.ActiveEdge	CI.CountEdges.Dir	CI.CountEdges.InitialCnt	CI.MeasType	Descr	PhysicalChanName	
-LinEncCount	Counter Input	Rising	Count Up	0	Count Edges		cDAQ9188-16D66BBMod3/ctr0	
+[DAQmxChannel]	AO.Max	AO.Min	AO.OutputType	AO.TermCfg	AO.Voltage.Units	ChanType	PhysicalChanName	
+6211_vo0/VoltageOut	10	-10	Voltage	RSE	Volts	Analog Output	Dev1/ao0	
+6211_vo1/VoltageOut	10	-10	Voltage	RSE	Volts	Analog Output	Dev1/ao1	
+wavemaker/VoltageOut	10	-10	Voltage	Differential	Volts	Analog Output	cDAQ9188-1F86F67Mod4/ao3	
 
-[DAQmxChannel]	ChanType	CI.AngEncoder.InitialAngle	CI.AngEncoder.PulsesPerRev	CI.AngEncoder.Units	CI.Encoder.DecodingType	CI.Encoder.ZIndexEnable	CI.Encoder.ZIndexPhase	CI.Encoder.ZIndexVal	CI.MeasType	Descr	PhysicalChanName	
-turbine_angle	Counter Input	0	100000	Degrees	X2	0	A High B High	0	Position:Angular Encoder		cDAQ9188-16D66BBMod4/ctr1	
+[DAQmxChannel]	ChanType	CI.AngEncoder.InitialAngle	CI.AngEncoder.PulsesPerRev	CI.AngEncoder.Units	CI.Encoder.DecodingType	CI.Encoder.ZIndexEnable	CI.Encoder.ZIndexPhase	CI.Encoder.ZIndexVal	CI.Encoder.ZInputTerm	CI.MeasType	Descr	PhysicalChanName	
+turbine_angle	Counter Input	0	100000	Degrees	X2	0	A High B High	0	/cDAQ9188-16D66BBMod4/PFI4	Position:Angular Encoder	Turbine angle from servo drive.	cDAQ9188-16D66BBMod4/ctr1	
 
 [DAQmxChannel]	ChanType	CI.Encoder.DecodingType	CI.Encoder.ZIndexEnable	CI.Encoder.ZIndexPhase	CI.Encoder.ZIndexVal	CI.LinEncoder.DistPerPulse	CI.LinEncoder.InitialPos	CI.LinEncoder.Units	CI.MeasType	Descr	PhysicalChanName	
-carriage_pos	Counter Input	X2	0	A High B High	0	4.0000000000000003E-005	0	Meters	Position:Linear Encoder		cDAQ9188-16D66BBMod4/ctr0	
+carriage_pos	Counter Input	X2	0	A High B High	0	4E-05	0	Meters	Position:Linear Encoder	Carriage position using the linear encoder.	cDAQ9188-16D66BBMod4/ctr0	
 
-[DAQmxChannel]	ChanType	CO.OutputType	CO.Pulse.HighTime	CO.Pulse.IdleState	CO.Pulse.LowTime	CO.Pulse.Time.InitialDelay	CO.Pulse.Time.Units	Descr	PhysicalChanName	
-VecPulse	Counter Output	Pulse:Time	0.01	Low	0.01	0	Seconds		cDAQ9188-16D66BBMod3/ctr2	
+[DAQmxTask]	Channels	RegenMode	SampClk.ActiveEdge	SampClk.Rate	SampClk.Src	SampQuant.SampMode	SampQuant.SampPerChan	SampTimingType	
+6211_vo0	6211_vo0/VoltageOut	Allow Regeneration	Rising	1000		Finite Samples	100	Sample Clock	
+6211_vo1	6211_vo1/VoltageOut	Allow Regeneration	Rising	1000		Continuous Samples	100	Sample Clock	
+9205_ai1	9205_ai1/Voltage		Rising	1000		Continuous Samples	100	Sample Clock	
+9205_ai10	9205_ai10/Voltage		Rising	1000		Continuous Samples	100	Sample Clock	
+9219_ch2	9219_ch2/Voltage		Rising	1.95		Finite Samples	10	Sample Clock	
+9230_ch0	9230_ch0/Acceleration		Rising	980		Continuous Samples	980	Sample Clock	
+9230_ch2	9230_ch2/Acceleration		Rising	6400		Finite Samples	6400	Sample Clock	
+accel_wavestaff	accel_wavestaff/Acceleration, accel_wavestaff/Voltage		Rising	1000		Continuous Samples	1000	Sample Clock	
+akima probe	akima probe/Voltage		Rising	100		Continuous Samples	100	Sample Clock	
+load1	load1/Force		Rising	1000		Continuous Samples	1000	Sample Clock	
+load2	load2/Force		Rising	1000		Continuous Samples	1000	Sample Clock	
+MyTemperatureTask	MyTemperatureTask/Temperature							On Demand	
+pcb_3713F112G_x	pcb_3713F112G_x/Acceleration		Rising	6400		Continuous Samples	6400	Sample Clock	
+wavemaker	wavemaker/VoltageOut	Allow Regeneration	Rising	1000		Finite Samples	100	Sample Clock	
 
-[DAQmxScale]	Lin.Slope	Lin.YIntercept	PreScaledUnits	ScaledUnits	ScaleType	
-drag_left_scale	742830.29770549724	0	Volts/Volt	N	Linear	
-drag_right_scale	742399.89847406675	0	Volts/Volt	N	Linear	
-toby_temp2	0.29999999999999999	0	Volts	mm	Linear	
-TobyandMattWizardryLessonsV2m	0.29999999999999999	0	Volts	Meters	Linear	
-torque_arm_scale	123436.95673891163	0	Volts/Volt	Nm	Linear	
-torque_trans_scale	39.838002000000003	0	Volts	Nm	Linear	
-Wave_Staff_Akamina	0.1242	0	Volts	meters	Linear	
-WaveStaff 1	0.29999999999999999	0	Volts	Meters	Linear	
+[DAQmxScale]	Descr	Lin.Slope	Lin.YIntercept	PreScaledUnits	ScaledUnits	ScaleType	
+drag_left_scale	Drag slide load cell scale. Left drag (looking at wavemaker).\nS/N:	723701.97106938	-13.065417570646	Volts/Volt	N	Linear	
+drag_right_scale	Drag slide load cell scale. Right drag (looking at wavemaker).\nS/N:	730950.70471631	1.4368518316255	Volts/Volt	N	Linear	
+LF_left_scale		1421.54765	0	mVolts/Volt	N	Linear	
+LF_right_scale		1423.40814	0	mVolts/Volt	N	Linear	
+torque_arm_scale	Redundant torque arm load cell scale.\nS/N:	120561.73688004	-2.9439285296047	Volts/Volt	Nm	Linear	
+torque_trans_scale	Torque transducer on shaft of TTB.	39.838002	0	Volts	Nm	Linear	
 
 [DAQmxDevice]	BusType	DevSerialNum	ProductNum	ProductType	
 Dev1	USB	0x138B24E	0x7270	USB-6211	
 
 [DAQmxCDAQChassis]	BusType	DevSerialNum	ProductType	TCPIP.DevIsReserved	TCPIP.EthernetIP	TCPIP.EthernetMAC	TCPIP.EthernetMDNSServiceInstance	TCPIP.Hostname	
-cDAQ9188-16D66BB	TCP/IP	0x16D66BB	cDAQ-9188	1	169.254.93.129	00:80:2F:13:B7:E7	NI cDAQ-9188 016D66BB	cDAQ9188-16D66BB	
+cDAQ9188-16D66BB	TCP/IP	0x16D66BB	cDAQ-9188	1	192.168.100.10	00:80:2F:13:B7:E7	NI cDAQ-9188 016D66BB	cDAQ9188-16D66BB	
+cDAQ9188-1F86F67	TCP/IP	0x1F86F67	cDAQ-9188	1	169.254.18.61	00:80:2F:32:46:79	NI cDAQ-9188 01F86F67	cDAQ9188-1F86F67	
 
 [DAQmxCDAQModule]	CompactDAQ.ChassisDevName	CompactDAQ.SlotNum	DevSerialNum	ProductType	
 cDAQ9188-16D66BBMod1	cDAQ9188-16D66BB	1	0x1763311	NI 9401	
 cDAQ9188-16D66BBMod2	cDAQ9188-16D66BB	2	0x16E0D9E	NI 9205	
 cDAQ9188-16D66BBMod3	cDAQ9188-16D66BB	3	0x16BE438	NI 9237	
 cDAQ9188-16D66BBMod4	cDAQ9188-16D66BB	4	0x18D6299	NI 9411	
+cDAQ9188-16D66BBMod6	cDAQ9188-16D66BB	6	0x20D295F	NI 9237	
+cDAQ9188-16D66BBMod7	cDAQ9188-16D66BB	7	0x1F77F24	NI 9230 (BNC)	
+cDAQ9188-16D66BBMod8	cDAQ9188-16D66BB	8	0x1A345C4	NI 9226	
+cDAQ9188-1F86F67Mod2	cDAQ9188-1F86F67	2	0x1625178	NI 9219	
+cDAQ9188-1F86F67Mod4	cDAQ9188-1F86F67	4	0x1692204	NI 9269	
 
