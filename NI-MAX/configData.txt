@@ -1,11 +1,11 @@
-[DAQmx]	MajorVersion	MinorVersion	
+﻿[DAQmx]	MajorVersion	MinorVersion	
 	23	0	
 
 [DAQmxChannel]	AI.ADCTimingMode	AI.Excit.Src	AI.Excit.Val	AI.Max	AI.MeasType	AI.Min	AI.ResistanceCfg	AI.RTD.R0	AI.RTD.Type	AI.Temp.Units	ChanType	Descr	PhysicalChanName	
 aft_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai3	
 fore_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai2	
 resistor_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai0	
-yaskawa_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai1	
+water_temp	High Resolution	Internal	0.0001	100	Temperature:RTD	0	3-Wire	1000	Pt3750	Deg F	Analog Input		cDAQ9188-16D66BBMod8/ai1	
 MyTemperatureTask/Temperature	High Resolution	Internal	0.0005	100	Temperature:RTD	0	4-Wire	100	Pt3750	Deg C	Analog Input		cDAQ9188-1F86F67Mod2/ai0	
 
 [DAQmxChannel]	AI.ADCTimingMode	AI.CustomScaleName	AI.Max	AI.MeasType	AI.Min	AI.TermCfg	AI.Voltage.Units	ChanType	Descr	PhysicalChanName	
@@ -72,10 +72,12 @@ torque_trans_scale	Torque transducer on shaft of TTB.	39.838002	0	Volts	Nm	Linea
 Dev1	USB	0x138B24E	0x7270	USB-6211	
 
 [DAQmxCDAQChassis]	BusType	DevSerialNum	ProductType	TCPIP.DevIsReserved	TCPIP.EthernetIP	TCPIP.EthernetMAC	TCPIP.EthernetMDNSServiceInstance	TCPIP.Hostname	
+cDAQ9181-227FAA5	TCP/IP	0x227FAA5	cDAQ-9181	1	169.254.140.66	00:80:2F:39:B2:77	NI cDAQ-9181 0227FAA5	cDAQ9181-227FAA5	
 cDAQ9188-16D66BB	TCP/IP	0x16D66BB	cDAQ-9188	1	192.168.100.10	00:80:2F:13:B7:E7	NI cDAQ-9188 016D66BB	cDAQ9188-16D66BB	
-cDAQ9188-1F86F67	TCP/IP	0x1F86F67	cDAQ-9188	1	169.254.18.61	00:80:2F:32:46:79	NI cDAQ-9188 01F86F67	cDAQ9188-1F86F67	
+cDAQ9188-1F86F67	TCP/IP	0x1F86F67	cDAQ-9188	0	169.254.115.202	00:80:2F:32:46:79	NI cDAQ-9188 01F86F67	cDAQ9188-1F86F67	
 
 [DAQmxCDAQModule]	CompactDAQ.ChassisDevName	CompactDAQ.SlotNum	DevSerialNum	ProductType	
+cDAQ9181-227FAA5Mod1	cDAQ9181-227FAA5	1	0x2248B25	NI 9269	
 cDAQ9188-16D66BBMod1	cDAQ9188-16D66BB	1	0x1763311	NI 9401	
 cDAQ9188-16D66BBMod2	cDAQ9188-16D66BB	2	0x16E0D9E	NI 9205	
 cDAQ9188-16D66BBMod3	cDAQ9188-16D66BB	3	0x16BE438	NI 9237	
